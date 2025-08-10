@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:4000/api/v1/notes", // Update if needed
+  baseURL: "http://localhost:9000/api/note", // Update if needed
   withCredentials: true, // Only needed if you're using cookies for auth
 });
 

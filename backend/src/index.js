@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(urlencoded());
 app.use(cookieParser());
 app.use(ratelimiter);
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 9000;
 
 //If the db is connected then only the port will start working
 connectDb().then(() => {

@@ -3,26 +3,21 @@ import Notes from "../models/Note.Model.js";
 const createNote = async (req, res) => {
   try {
     const { title, description, pinned = false } = req.body;
-
+    
     if (!title || !description) {
       return res.status(400).json({
         message: "All fields are required",
         success: false,
       });
     }
-
+    
     const notes = await Notes.create({
       title,
       description,
       pinned: pinned || false,
     });
-
-    if (!notes) {
-      return res.status(501).json({
-        message: "Failed to create notes",
-        success: false,
-      });
-    }
+    console.log("Creating the notes");
+    
     await notes.save();
     return res.status(200).json({
       message: "Successfully created the notes",
@@ -31,7 +26,7 @@ const createNote = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       error,
-      message: "Some issur in creating notes",
+      message: "Some issue in creating notes",
       success: false,
     });
   }
@@ -64,18 +59,12 @@ const showNotes = async (req, res) => {
   }
 };
 
-const showAllNotes=async (_,res)=>{
+const showAllNotes=async (req,res)=>{
   try {
     // const notes=await Notes.find(); a normal way
     const notes=await Notes.find().sort({createdAt:-1 }); //newest first
-    if(!notes){
-      return res.status(404).json({
-        message:"Wrong id! Note not found"
-      })
-    }
-    return res.status(200).json({
-      message:"Notes found successfully"
-    })
+    // const notes=await Notes.findx();
+    return res.status(200).json(notes)
   } catch (error) {
       console.error("Error in getting all the notes");
       return res.status(500).json({
@@ -142,4 +131,4 @@ const deleteNote = async (req, res) => {
     });
   }
 };
-export { createNote, showNotes, updateNote, deleteNote };
+export { createNote, showNotes, updateNote, deleteNote, showAllNotes };
