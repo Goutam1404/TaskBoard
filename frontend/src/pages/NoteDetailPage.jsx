@@ -1,92 +1,137 @@
-// src/pages/NotesPage.jsx
-import React, { useEffect, useState } from "react";
-import { useNotes } from "../hooks/useNotes";
+import { useEffect } from "react";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
+import api from "../lib/axios";
+import toast from "react-hot-toast";
+import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
 
-const NotesPage = ({ userId }) => {
-  const { notes, loading, loadNotes, addNote, removeNote, editNote } =
-    useNotes();
-  const [newNote, setNewNote] = useState("");
-  const [editMode, setEditMode] = useState(false);
-  const [editId, setEditId] = useState(null);
-  const [editValue, setEditValue] = useState("");
+const NoteDetailPage = () => {
+  const [note, setNote] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { id } = useParams();
 
   useEffect(() => {
-    loadNotes(userId); // Fetch notes when component mounts
-  }, [userId]);
+    const fetchNote = async () => {
+      try {
+        const res = await api.get(`/notes/${id}`);
+        setNote(res.data);
+      } catch (error) {
+        console.log("Error in fetching note", error);
+        toast.error("Failed to fetch the note");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleAdd = () => {
-    if (!newNote.trim()) return;
-    addNote({ title: newNote });
-    setNewNote("");
-  };
+    fetchNote();
+  }, [id]);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Delete this note?")) {
-      removeNote(id);
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this note?")) return;
+
+    try {
+      await api.delete(`/notes/${id}`);
+      toast.success("Note deleted");
+      navigate("/");
+    } catch (error) {
+      console.log("Error deleting the note:", error);
+      toast.error("Failed to delete note");
     }
   };
 
-  const handleEdit = (id, currentValue) => {
-    setEditId(id);
-    setEditValue(currentValue);
-    setEditMode(true);
+  const handleSave = async () => {
+    if (!note.title.trim() || !note.content.trim()) {
+      toast.error("Please add a title or content");
+      return;
+    }
+
+    setSaving(true);
+
+    try {
+      await api.put(`/notes/${id}`, note);
+      toast.success("Note updated successfully");
+      navigate("/");
+    } catch (error) {
+      console.log("Error saving the note:", error);
+      toast.error("Failed to update note");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const handleEditSubmit = () => {
-    if (!editValue.trim()) return;
-    editNote(editId, { title: editValue });
-    setEditId(null);
-    setEditValue("");
-    setEditMode(false);
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-base-200 flex items-center justify-center">
+        <LoaderIcon className="animate-spin size-10" />
+      </div>
+    );
+  }
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Your Notes</h2>
+    <div className="min-h-screen bg-base-200">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <Link to="/" className="btn btn-ghost">
+              <ArrowLeftIcon className="h-5 w-5" />
+              Back to Notes
+            </Link>
+            <button
+              onClick={handleDelete}
+              className="btn btn-error btn-outline"
+            >
+              <Trash2Icon className="h-5 w-5" />
+              Delete Note
+            </button>
+          </div>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <input
-          type="text"
-          placeholder="Write a note..."
-          value={newNote}
-          onChange={(e) => setNewNote(e.target.value)}
-        />
-        <button onClick={handleAdd}>Add</button>
+          <div className="card bg-base-100">
+            <div className="card-body">
+              <div className="form-control mb-4">
+                <label className="label">
+                  <span className="label-text">Title</span>
+                </label>
+                <input
+                  type="text"
+                  placeholder="Note title"
+                  className="input input-bordered"
+                  value={note.title}
+                  onChange={(e) => setNote({ ...note, title: e.target.value })}
+                />
+              </div>
+
+              <div className="form-control mb-4">
+                <label className="label">
+                  <span className="label-text">Content</span>
+                </label>
+                <textarea
+                  placeholder="Write your note here..."
+                  className="textarea textarea-bordered h-32"
+                  value={note.content}
+                  onChange={(e) =>
+                    setNote({ ...note, content: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="card-actions justify-end">
+                <button
+                  className="btn btn-primary"
+                  disabled={saving}
+                  onClick={handleSave}
+                >
+                  {saving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {loading ? (
-        <p>Loading notes...</p>
-      ) : notes.length === 0 ? (
-        <p>No notes found.</p>
-      ) : (
-        <ul>
-          {notes.map((note) => (
-            <li key={note._id} style={{ marginBottom: "0.5rem" }}>
-              {editMode && editId === note._id ? (
-                <>
-                  <input
-                    type="text"
-                    value={editValue}
-                    onChange={(e) => setEditValue(e.target.value)}
-                  />
-                  <button onClick={handleEditSubmit}>Save</button>
-                  <button onClick={() => setEditMode(false)}>Cancel</button>
-                </>
-              ) : (
-                <>
-                  {note.title}
-                  <button onClick={() => handleEdit(note._id, note.title)}>
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(note._id)}>Delete</button>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
     </div>
   );
 };
-
-export default NotesPage;
+export default NoteDetailPage;

@@ -17,7 +17,6 @@ const Home = () => {
         // console.log("Inside fetchnotes");
         const res = await api.get("/note");
         // console.log(res.data);
-        setLoading(false);
         setNotes(res.data);
         setRateLimited(false);
       } catch (error) {
