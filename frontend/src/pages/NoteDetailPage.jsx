@@ -17,8 +17,10 @@ const NoteDetailPage = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await api.get(`/notes/${id}`);
-        setNote(res.data);
+        const res = await api.get(`/note/${id}`);
+        setNote(res.data.note);
+        // console.log(res.data.note);
+        
       } catch (error) {
         console.log("Error in fetching note", error);
         toast.error("Failed to fetch the note");
@@ -44,7 +46,7 @@ const NoteDetailPage = () => {
   };
 
   const handleSave = async () => {
-    if (!note.title.trim() || !note.content.trim()) {
+    if (!note.title.trim() || !note.description.trim()) {
       toast.error("Please add a title or content");
       return;
     }
@@ -106,14 +108,14 @@ const NoteDetailPage = () => {
 
               <div className="form-control mb-4">
                 <label className="label">
-                  <span className="label-text">Content</span>
+                  <span className="label-text">Description</span>
                 </label>
                 <textarea
                   placeholder="Write your note here..."
                   className="textarea textarea-bordered h-32"
-                  value={note.content}
+                  value={note.description}
                   onChange={(e) =>
-                    setNote({ ...note, content: e.target.value })
+                    setNote({ ...note, description: e.target.value })
                   }
                 />
               </div>

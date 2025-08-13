@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar.jsx";
 import RateLimitedUI from "../components/RateLimitedUI.jsx";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { api } from "../lib/axios.js";
+import api from "../lib/axios.js";
 import NotesCard from "../components/NotesCard.jsx";
 import NotesNotFound from "../components/NotesNotFound.jsx";
 const Home = () => {
