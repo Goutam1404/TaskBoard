@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Router, Routes } from 'react-router'
 import { CreatePage, NotesPage, Home } from "./pages/index.js";
+import TimerPage from './pages/TimerPage.jsx';
 
 
 const App = () => {
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/note/:id" element={<NotesPage />} />
+        <Route path="/timer" element={<TimerPage />} />
       </Routes>
     </div>
   );
