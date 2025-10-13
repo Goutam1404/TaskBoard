@@ -75,7 +75,7 @@ It also includes a **rate-limiting system** powered by **Upstash Redis** to prev
 ### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/<your-username>/TaskBoard.git
-cd ThinkBoard
+cd TaskBoard
 ```
 
 ### 2️⃣ Install Dependencies
@@ -130,14 +130,14 @@ Now open http://localhost:{process.env.PORT}
 
 ## 🔮 Future Enhancements
 
-### ->🔐 User authentication (JWT or OAuth)
+* 🔐 User authentication (JWT or OAuth)
 
-### -> 🪶 Rich text editor for notes
+* 🪶 Rich text editor for notes
 
-### ->🗂️ Note categories & tags
+* 🗂️ Note categories & tags
 
-### ->☁️ Cloud storage for backups
+* ☁️ Cloud storage for backups
 
-### ->📊 Stopwatch session history
+* 📊 Stopwatch session history
 
 
