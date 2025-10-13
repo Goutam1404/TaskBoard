@@ -49,7 +49,7 @@ It also includes a **rate-limiting system** powered by **Upstash Redis** to prev
 ![Notes Dashboard](./assets/createNote.png)
 
 ### ⏱ Starting Stopwatch/Timer
-![Notes Dashboard](./assets/createNote.png)
+![Notes Dashboard](./assets/stopwatch.png)
 
 <!-- ### 🚫 Rate Limit Message
 ![Rate Limit](./assets/ratelimit.png) -->
