@@ -12,7 +12,7 @@ dotenv.config();
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT","DELETE", "OPTIONS"],
     credentials: true,
   })
 );
@@ -20,7 +20,10 @@ app.use(
 app.use(express.json());
 app.use(urlencoded());
 app.use(cookieParser());
-app.use(ratelimiter);
+
+//Some issue may appear in rate limiter as the token gets expired so we can comment out these line
+app.use(ratelimiter); 
+
 const PORT = process.env.PORT || 9000;
 
 //If the db is connected then only the port will start working

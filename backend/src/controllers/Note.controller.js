@@ -87,9 +87,9 @@ const updateNote = async (req, res) => {
     // updatedNotes.title = title || updatedNotes.title;
     // updatedNotes.description = description || updatedNotes.description;
 
-    const updatedNotes = Notes.findByIdAndUpdate(
+    const updatedNotes = await Notes.findByIdAndUpdate(
       id,
-      { title, content },
+      { title, description },
       { new: true }
     );
     if (!updatedNotes) {

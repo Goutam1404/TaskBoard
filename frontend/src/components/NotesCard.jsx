@@ -5,12 +5,12 @@ import  api  from "../lib/axios";
 import toast from "react-hot-toast";
 
 const NotesCard = ({ note, setNotes }) => {
+
   const handleDelete = async (e, id) => {
     e.preventDefault();
     if (!window.confirm("Are you sure you want to delete this note ?")) return;
-
     try {
-      await api.delete(`/note/delete-note/${id}`);
+      await api.delete(`/delete-note/${id}`);
       setNotes((prev) => prev.filter((note) => note._id !== id)); //remove the delted note from the ui
       toast.success("Note deleted successfully");
     } catch (error) {
