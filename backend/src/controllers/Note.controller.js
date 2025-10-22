@@ -1,23 +1,23 @@
-import Notes from "../models/Note.Model.js";
+import Notes from "../models/Note.model.js";
 
 const createNote = async (req, res) => {
   try {
     const { title, description, pinned = false } = req.body;
-    
+
     if (!title || !description) {
       return res.status(400).json({
         message: "All fields are required",
         success: false,
       });
     }
-    
+
     const notes = await Notes.create({
       title,
       description,
       pinned: pinned || false,
     });
     console.log("Creating the notes");
-    
+
     await notes.save();
     return res.status(200).json({
       message: "Successfully created the notes",
@@ -59,19 +59,19 @@ const showNotes = async (req, res) => {
   }
 };
 
-const showAllNotes=async (req,res)=>{
+const showAllNotes = async (req, res) => {
   try {
     // const notes=await Notes.find(); a normal way
-    const notes=await Notes.find().sort({createdAt:-1 }); //newest first
+    const notes = await Notes.find().sort({ createdAt: -1 }); //newest first
     // const notes=await Notes.findx();
-    return res.status(200).json(notes)
+    return res.status(200).json(notes);
   } catch (error) {
-      console.error("Error in getting all the notes");
-      return res.status(500).json({
-        message:"Internal server error",
-      })
+    console.error("Error in getting all the notes");
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
-}
+};
 
 const updateNote = async (req, res) => {
   try {
@@ -101,8 +101,7 @@ const updateNote = async (req, res) => {
     return res.status(200).json({
       message: "Successfully updated the notes",
       success: true,
-      updatedNotes
-
+      updatedNotes,
     });
   } catch (error) {
     return res.status(501).json({
@@ -129,10 +128,10 @@ const deleteNote = async (req, res) => {
       .json({ success: true, message: "Note deleted successfully" });
   } catch (error) {
     console.log(error);
-    
+
     return res.status(500).json({
       message: "Error in deleting the note",
-      error
+      error,
     });
   }
 };
