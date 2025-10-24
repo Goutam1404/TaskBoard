@@ -6,13 +6,14 @@ import cors from "cors";
 import notesRouter from "./routes/Note.route.js";
 import ratelimiter from "./middleware/rateLimiter.middleware.js";
 import { connectDb } from "./db.js";
+import todoRouter from "./routes/Todo.route.js";
 const app = express();
 dotenv.config();
 
 app.use(
   cors({
     origin: "http://localhost:5173",
-    methods: ["GET", "POST", "PUT","DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
@@ -22,7 +23,7 @@ app.use(urlencoded());
 app.use(cookieParser());
 
 //Some issue may appear in rate limiter as the token gets expired so we can comment out these line
-app.use(ratelimiter); 
+app.use(ratelimiter);
 
 const PORT = process.env.PORT || 9000;
 
@@ -38,3 +39,4 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/note", notesRouter);
+app.use("/api/todo", todoRouter);
