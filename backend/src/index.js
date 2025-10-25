@@ -38,5 +38,5 @@ app.get("/", (req, res) => {
   res.send("At the home page");
 });
 
-app.use("/api/note", notesRouter);
-app.use("/api/todo", todoRouter);
+app.use("/api/v1/note", notesRouter);
+app.use("/api/v1/todo", todoRouter);

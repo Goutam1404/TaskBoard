@@ -1,4 +1,4 @@
-import Todo from "../models/Todo.model";
+import Todo from "../models/Todo.model.js";
 
 const createTodo = async (req, res) => {
   try {
@@ -136,8 +136,8 @@ const deleteTodo = async (req, res) => {
 const addTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { task } = req.body; //in model it is -> taskName
-    if (!id || !task) {
+    const { taskName, isCompleted } = req.body; //in model it is -> taskName
+    if (!id || !taskName) {
       return res.status(400).json({
         success: false,
         message: "task is required as input",
@@ -148,7 +148,7 @@ const addTask = async (req, res) => {
     const updatedTodo = await Todo.findByIdAndUpdate(
       id,
       {
-        $push: { tasks: { task } },
+        $push: { tasks: { taskName, isCompleted } },
       },
       { new: true }
     );
@@ -173,6 +173,30 @@ const addTask = async (req, res) => {
     });
   }
 };
+
+const getTask=async (req,res)=>{
+ const { id } = req.params;
+  try {
+    const todo = await Todo.findById(id);
+    if (!todo) {
+      return res.status(404).json({
+        success: false,
+        message: "Unable to get the todo",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "All tasks found",
+      tasks:todo.tasks,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Some error. Unable to get the todo",
+      error,
+    });
+  }
+}
 
 const updatedTask = async (req, res) => {
   try {
@@ -211,7 +235,7 @@ const updatedTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   try {
-    const { id, taskId } = req.parmas;
+    const { id, taskId } = req.params;
     const todo = await Todo.findByIdAndUpdate(
       id,
       { $pull: { tasks: { _id: taskId } } },
@@ -227,6 +251,7 @@ const deleteTask = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Task deleted successfully",
+      todo
     });
   } catch (error) {
     return res.status(500).json({
@@ -243,6 +268,7 @@ export {
   getTodoById,
   deleteTodo,
   addTask,
+  getTask,
   updatedTask,
   deleteTask,
 };
