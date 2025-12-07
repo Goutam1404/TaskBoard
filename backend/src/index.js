@@ -23,7 +23,7 @@ app.use(urlencoded());
 app.use(cookieParser());
 
 //Some issue may appear in rate limiter as the token gets expired so we can comment out these line
-app.use(ratelimiter);
+// app.use(ratelimiter);
 
 const PORT = process.env.PORT || 9000;
 

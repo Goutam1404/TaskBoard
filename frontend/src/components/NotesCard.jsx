@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../lib/utils";
 import  api  from "../lib/axios";
 import toast from "react-hot-toast";
+import { deleteNote } from "../api/NotesApi";
 
 const NotesCard = ({ note, setNotes }) => {
 
@@ -10,7 +11,8 @@ const NotesCard = ({ note, setNotes }) => {
     e.preventDefault();
     if (!window.confirm("Are you sure you want to delete this note ?")) return;
     try {
-      await api.delete(`/note/${id}`);
+      await deleteNote(id);
+      // await api.delete(`/note/${id}`);
       setNotes((prev) => prev.filter((note) => note._id !== id)); //remove the delted note from the ui
       toast.success("Note deleted successfully");
     } catch (error) {

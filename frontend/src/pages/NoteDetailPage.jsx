@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { ArrowLeftIcon, LoaderIcon, Trash2Icon } from "lucide-react";
+import { deleteNote, fetchSingleNote } from "../api/NotesApi";
 
 const NoteDetailPage = () => {
   const [note, setNote] = useState(null);
@@ -18,7 +19,8 @@ const NoteDetailPage = () => {
   useEffect(() => {
     const fetchNote = async () => {
       try {
-        const res = await api.get(`/note/${id}`);
+        const res = await fetchSingleNote(id);
+        // const res = await api.get(`/note/${id}`);
         setNote(res.data.note);
         // console.log(res.data.note);
         
@@ -37,7 +39,8 @@ const NoteDetailPage = () => {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
-      await api.delete(`/note/${id}`);
+      await deleteNote(id);
+      // await api.delete(`/note/${id}`);
       toast.success("Note deleted");
       navigate("/");
     } catch (error) {
